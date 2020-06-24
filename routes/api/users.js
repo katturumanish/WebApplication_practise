@@ -1,0 +1,158 @@
+const express = require('express');
+const router = express.Router();
+const { check, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const gravatar = require('gravatar');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const User = require("../../models/User");
+const auth = require("../../middleware/auth");
+
+router.post('/register', [
+    check('firstName', 'First Name is required').not().isEmpty(),
+    check('lastName', 'Last Name is required').not().isEmpty(),
+    check('email', 'please enter a valid email').isEmail(),
+    check('password', 'please enter a password of minimum length 6 characters').isLength({ min: 6})
+], async (req,res) => {
+    const errors = validationResult(req);
+    if( !errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array()});
+    }
+    else{
+        
+       const email = req.body.email;
+       let user = await User.findOne({ email });
+       if(user){
+           return res.status(400).json({ errors: [{ msg: "User already exists"}]});
+       }
+       else{
+         try {
+           const avatar = gravatar.url(email, {
+               s: '200',
+               r: 'pg',
+               d: 'mm'
+           })
+           const firstName = req.body.firstName;
+           const lastName = req.body.lastName;
+           //const email = req.body.email;
+           let salt = await bcrypt.genSalt(10);
+           const password = await bcrypt.hash(req.body.password, salt);
+
+           user = new User({
+               firstName,
+               lastName,
+               email,
+               password,
+               avatar
+           })
+
+           await user.save();
+           
+           const payload = {
+               user:{
+                   id: user.id
+               }
+           }
+           
+           jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err,token) => {
+               if(err) throw err;
+               res.send({token});
+           })
+
+           return //res.status(200).json({msg: "user succesfully Registered"})
+        }catch (err){
+            console.log(err.message);
+            return res.status(400).json({error : err.message});
+        }
+       }
+       //res.send('users route!!');
+    }
+});
+
+router.get('/getUserDetails', auth, async (req,res) => {
+    try{
+        const user = await User.findById(req.user.id).select('-password');
+        res.send(user);
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json({msg: "No User details found"});
+    }
+});
+
+router.post('/login', 
+  [
+      check('email','Enter a valid email').isEmail(),
+      check('password','password is required').exists()
+  ], async (req,res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.send(400).json({errors: errors.array()});
+    }
+    try{
+        const email = req.body.email;
+        const password = req.body.password;
+        const user = await User.findOne({ email });
+        if(!user){
+            res.status(400).json({msg: "user doesn't exist!!"});
+        }else{
+          const imatch = await bcrypt.compare(password, user.password);
+          if(!imatch){
+              return res.status(400).json({msg: "invalid password"});
+          }
+          
+          const payload = {
+              user:{
+                  id: user.id
+              }
+          };
+
+          jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err,token) => {
+              if(err) throw err;
+              res.json({token});
+          })
+        }
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json('server error');
+    }
+})
+
+router.post('/work-done', 
+  [
+      check('email','Enter a valid email').isEmail(),
+      check('password','password is required').exists()
+  ], async (req,res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.send(400).json({errors: errors.array()});
+    }
+    try{
+        const email = req.body.email;
+        const password = req.body.password;
+        const user = await User.findOne({ email });
+        if(!user){
+            res.status(400).json({msg: "user doesn't exist!!"});
+        }else{
+          const imatch = await bcrypt.compare(password, user.password);
+          if(!imatch){
+              return res.status(400).json({msg: "invalid password"});
+          }
+          
+          const payload = {
+              user:{
+                  id: user.id
+              }
+          };
+
+          jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err,token) => {
+              if(err) throw err;
+              res.json({token});
+          })
+        }
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json('server error');
+    }
+})
+
+module.exports = router;

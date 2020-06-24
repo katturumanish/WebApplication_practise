@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://manish:manish123@cluster0-k4z1v.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtToken": "myToken" 
+}
