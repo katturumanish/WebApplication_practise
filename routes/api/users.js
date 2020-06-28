@@ -34,6 +34,7 @@ router.post('/register', [
            })
            const firstName = req.body.firstName;
            const lastName = req.body.lastName;
+           const username = req.body.username;
            //const email = req.body.email;
            let salt = await bcrypt.genSalt(10);
            const password = await bcrypt.hash(req.body.password, salt);
@@ -41,12 +42,14 @@ router.post('/register', [
            user = new User({
                firstName,
                lastName,
+               username,
                email,
                password,
                avatar
            })
 
            await user.save();
+           console.log("New user created");
            
            const payload = {
                user:{
@@ -79,25 +82,18 @@ router.get('/getUserDetails', auth, async (req,res) => {
     }
 });
 
-router.post('/login', 
-  [
-      check('email','Enter a valid email').isEmail(),
-      check('password','password is required').exists()
-  ], async (req,res) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.send(400).json({errors: errors.array()});
-    }
+router.post('/login', async (req,res) => {
     try{
-        const email = req.body.email;
+        const username = req.body.username;
         const password = req.body.password;
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ username });
         if(!user){
-            res.status(400).json({msg: "user doesn't exist!!"});
+            res.status(400).json("user doesn't exist!!");
         }else{
           const imatch = await bcrypt.compare(password, user.password);
           if(!imatch){
-              return res.status(400).json({msg: "invalid password"});
+              console.log("invalid password");
+              res.status(400).json("invalid password");
           }
           
           const payload = {

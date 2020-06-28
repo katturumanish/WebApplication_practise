@@ -6,6 +6,7 @@ import {PasswordInput} from "../common/PasswordInput";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {Spinner} from "../common/Spinner";
+import axios from "axios";
 
 const Form = styled.form`
    width: 100%;
@@ -46,6 +47,12 @@ export function Login(){
       timeout = setTimeout(() => {
          setLoading(false);
       }, 2000);
+      axios.post("http://localhost:3001/users/login",{
+         username:formFields.username,
+         password:formFields.password
+      }).then(res => {
+         console.log(res.data);
+      })
    }
 
     return(

@@ -11,9 +11,9 @@ const app = express();
 app.use(express.json({ extended: false }));
 app.use(passport.initialize());
 
-app.use(cors({ origin: "http://localhost:3001", credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(function(req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
       "Access-Control-Allow-Methods",
@@ -37,7 +37,7 @@ app.get('/', (req, res) => res.send('api Running'));
 
 app.use('/users', require('./routes/api/users'));
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Home} from "./Pages/Home";
 import {Login} from "./Pages/Login";
-import {Register} from "./Pages/Register";
+import Register from "./Pages/Register";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {createGlobalStyle} from "styled-components";
 
