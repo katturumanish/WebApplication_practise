@@ -134,6 +134,7 @@ export default class Register extends Component{
                 Already have an account? Login here
                 </Link>
              </div>
+             <p>Join for Free</p>
             </>
             }
           </Form>
