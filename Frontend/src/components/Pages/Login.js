@@ -4,7 +4,7 @@ import {Input} from "../common/Input";
 import {Button} from "../common/Button";
 import {PasswordInput} from "../common/PasswordInput";
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {Spinner} from "../common/Spinner";
 import axios from "axios";
 
@@ -30,7 +30,7 @@ const Form = styled.form`
 let timeout;
 
 export function Login(){
-   const [formFields, setFormFields] = useState({username:"", password:""})
+   const [formFields, setFormFields] = useState({username:"", password:"", redirect:""})
    const [loading, setLoading] =  useState(false);
 
    function handleInputChange(e){
@@ -52,9 +52,16 @@ export function Login(){
          password:formFields.password
       }).then(res => {
          console.log(res.data);
+         if(res.status == 200){
+            setFormFields(s => ({
+               ...s,
+               redirect: true
+            }));
+         }
+           
       })
    }
-
+    if(formFields.redirect) return <Redirect to ="/Dashboard"/>;
     return(
        <PageLayout>
           <h1>

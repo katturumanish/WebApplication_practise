@@ -2,6 +2,7 @@ import React from 'react';
 import {Home} from "./Pages/Home";
 import {Login} from "./Pages/Login";
 import Register from "./Pages/Register";
+import Dashboard from "./Pages/Dashboard";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {createGlobalStyle} from "styled-components";
 
@@ -29,6 +30,9 @@ function App() {
              </Route>
              <Route path="/Home">
                 <Home/>
+             </Route>
+             <Route path="/Dashboard">
+                <Dashboard/>
              </Route>
           </Switch>
       </BrowserRouter>
