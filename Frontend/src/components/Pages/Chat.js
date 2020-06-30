@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { Chat, Channel, ChannelHeader, Thread, Window } from 'stream-chat-react';
 import { MessageList, MessageInput } from 'stream-chat-react';
 import { useParams } from "react-router";
@@ -7,6 +7,7 @@ import styled from "styled-components";
 import 'stream-chat-react/dist/css/index.css';
 import Avatar from '@material-ui/core/Avatar';
 import MessageContent from "./MessageContent";
+import Axios from "axios";
 
 const Div = styled.div`
    background-color:#f1f2f6;
@@ -64,26 +65,37 @@ const Div = styled.div`
 `;
 
 
-const chatClient = new StreamChat('gx5a64bj4ptz');
-const userToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoicmFwaWQtYmFuZC00In0.1WD1M31AJzCN90bkBexwQpyIgydrMubqzPC9jOz4Nds';
-
-chatClient.setUser(
-  {
-       id: 'rapid-band-4',
-       name: 'Rapid band',
-       image: 'https://getstream.io/random_svg/?id=rapid-band-4&name=Rapid+band'
-  },
-  userToken,
-);
-
-const channel = chatClient.channel('messaging', 'godevs', {
-  // add as many custom fields as you'd like
-  image: 'https://cdn.chrisshort.net/testing-certificate-chains-in-go/GOPHER_MIC_DROP.png',
-  name: 'Talk about Go',
-});
 
 export default function Chatbox(){
     let { name } = useParams();
+    const [formElements, setFormElements] = useState({textmsg:""})
+
+    function handleChange(e){
+        e.persist();
+        setFormElements(s => ({
+            ...s,
+            [e.target.name]: e.target.value
+        }))
+    }
+    
+    
+    function handleSend(e){
+        e.persist();
+        let name1 = localStorage.getItem("fname");
+        let message = formElements.textmsg;
+        setFormElements(s => ({
+            ...s,
+            textmsg: "",     
+        }));
+        Axios.post("http://localhost:3001/users/saveMessages",{
+            name1, 
+            name2: name,
+            message,
+        }).then(res => {
+            console.log(res.data);
+        })
+    }
+
     return(
        <Div>
            <div className="alt-msgcard">
@@ -94,8 +106,8 @@ export default function Chatbox(){
                <hr />
                <MessageContent />
                <div className="alt-msgcard-msgtxtbox">
-                   <input className="alt-msgcard-msgtxtbox-input" placeholder="     Type a message..."/>
-                   <button className="alt-msgcard-msgtxtbox-btn">Send</button>
+                   <input value={formElements.textmsg} onChange={handleChange} name="textmsg" className="alt-msgcard-msgtxtbox-input" placeholder="     Type a message..."/>
+                   <button onClick={handleSend} className="alt-msgcard-msgtxtbox-btn">Send</button>
                </div>
            </div>
       </Div>

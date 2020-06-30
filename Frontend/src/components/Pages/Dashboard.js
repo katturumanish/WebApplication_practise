@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import { Card, FormInput  } from "shards-react";
+import { Card } from "shards-react";
 import RightSideBar from "./RightSideBar";
 
 const Div = styled.div`

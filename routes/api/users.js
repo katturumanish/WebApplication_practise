@@ -96,7 +96,7 @@ router.post('/login', async (req,res) => {
               console.log("invalid password");
               res.status(400).json("invalid password");
           }
-          
+          let fname = user.firstName;
           const payload = {
               user:{
                   id: user.id
@@ -105,7 +105,7 @@ router.post('/login', async (req,res) => {
 
           jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err,token) => {
               if(err) throw err;
-              res.json({token});
+              res.json({token,fname});
           })
         }
     }catch(err){
@@ -134,7 +134,7 @@ router.post('/work-done',
           if(!imatch){
               return res.status(400).json({msg: "invalid password"});
           }
-          
+          let fname = user.firstName;
           const payload = {
               user:{
                   id: user.id
@@ -143,7 +143,7 @@ router.post('/work-done',
 
           jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err,token) => {
               if(err) throw err;
-              res.json({token});
+              res.json({token},{fname});
           })
         }
     }catch(err){

@@ -51,7 +51,8 @@ export function Login(){
          username:formFields.username,
          password:formFields.password
       }).then(res => {
-         console.log(res.data);
+         console.log("res.data: ", res.data);
+         localStorage.setItem("fname", res.data.fname);
          if(res.status == 200){
             setFormFields(s => ({
                ...s,
