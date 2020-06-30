@@ -34,7 +34,7 @@ function App() {
              <Route path="/Dashboard">
                 <Dashboard/>
              </Route>
-             <Route path="/chatbox">
+             <Route path="/chatbox/:name">
                 <Chatbox/>
              </Route>
           </Switch>
