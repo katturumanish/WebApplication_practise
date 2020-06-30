@@ -7,7 +7,7 @@ const Div = styled.div`
 `;
 
 export default class MessageContent extends Component{
-    constructor(){
+    constructor(props){
         super();
         this.state = {
              msgs:[],

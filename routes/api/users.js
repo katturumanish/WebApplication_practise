@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require("../../models/User");
 const auth = require("../../middleware/auth");
+const Messages = require("../../models/Messages");
 
 router.post('/register', [
     check('firstName', 'First Name is required').not().isEmpty(),
@@ -148,6 +149,43 @@ router.post('/work-done',
     }catch(err){
         console.error(err.message);
         res.status(500).json('server error');
+    }
+})
+
+router.post("/saveMessages", async(req,res) => {
+    try{
+       let name1 = req.body.name1;
+       let name2 = req.body.name2;
+       let message = req.body.message;
+       let msgRecord = await Messages.findOne({ $or: [ {$and: [{name1: name1},{name2: name2}]}, {$and: [{name1: name2},{name2: name1}]}] });
+       if(!msgRecord){
+           let messages = { Flag: "1", message: message};
+           console.log("No earlier conversation exists, Creating a new record");
+           msgrecord = new Messages({
+               name1,
+               name2,
+               messages
+           });
+           await msgrecord.save();
+           console.log("new record created");
+           res.status(200).json("New Record Created");
+       }
+       else{
+          let messages;
+          if(msgRecord.name1 == name1){
+             messages = { Flag: "1", message: message};
+          }
+          else{
+            messages = { Flag: "0", message: message};
+          }
+          await msgRecord.messages.push(messages);
+          await msgRecord.save();
+          console.log("message inserted");
+          res.status(200).json("message inserted");
+       }
+    }catch(err){
+        console.log(err.message);
+        res.send(500).json("server error")
     }
 })
 
