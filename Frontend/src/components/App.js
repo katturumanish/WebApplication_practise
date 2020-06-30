@@ -3,6 +3,7 @@ import {Home} from "./Pages/Home";
 import {Login} from "./Pages/Login";
 import Register from "./Pages/Register";
 import Dashboard from "./Pages/Dashboard";
+import Chatbox from "./Pages/Chat";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {createGlobalStyle} from "styled-components";
 
@@ -12,7 +13,6 @@ const GlobalStyle = createGlobalStyle`
        min-height: 100vh;
        margin: 0;
        color: black;
-       font-family: "Marck Script"
    }
 `;
 
@@ -33,6 +33,9 @@ function App() {
              </Route>
              <Route path="/Dashboard">
                 <Dashboard/>
+             </Route>
+             <Route path="/chatbox">
+                <Chatbox/>
              </Route>
           </Switch>
       </BrowserRouter>

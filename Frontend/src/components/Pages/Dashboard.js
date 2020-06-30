@@ -1,25 +1,30 @@
 import React, {Component} from "react";
 import styled from "styled-components";
 import { Card, FormInput  } from "shards-react";
+import RightSideBar from "./RightSideBar";
 
 const Div = styled.div`
    background-color:#f1f2f6;
    height:1000px;
+   display:flex;
    .alt-cardmain{
       position:relative;
+      display:flex;
       top:30px;
       left:200px;
-      width:900px;
+      width:850px;
       height:300px;
       background-color:white;
       border-radius:10px;
       box-shadow: 0 0 10px #eeeeee;
    }
+   .alt-Section1{
+       display:flex;
+       width:1200px;
+   }
    .alt-cardsearch{
        position:relative;
-       top:10px;
-       left:200px;
-       width:900px;
+       width:1350px;
        height:60px;
        background-color:white;
        border-radius:10px;
@@ -38,7 +43,7 @@ const Div = styled.div`
     position:relative;
     top:40px;
     left:200px;
-    width:420px;
+    width:380px;
     height:400px;
     background-color:white;
     border-radius:10px;
@@ -111,7 +116,8 @@ const Div = styled.div`
        left:40px;
        top:12px;
        border-radius:20px;
-       height:30px;
+       height:35px;
+       width:300px;
        border-style:none;
        background-color: #f1f2f6;
    }
@@ -141,12 +147,16 @@ export default class Dashboard extends Component{
     render(){
         return(
             <Div>
+                <div className="alt-content">
                 <Card className="alt-cardsearch">
                     <input className="alt-cardsearch-input" placeholder="    Search"></input>
                 </Card>
-                <Card className="alt-cardmain">
-                    <img className="alt-img" src="https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"></img>
-                </Card>
+                <div className="alt-Section1">
+                  <Card className="alt-cardmain">
+                      <img className="alt-img" src="https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"></img>
+                  </Card>
+                  <RightSideBar />
+                </div>
                 <div className="alt-mainline">
                     <button className="alt-mainline-txt">Timeline</button>
                     <button className="alt-mainline-txt1">About</button>
@@ -166,7 +176,7 @@ export default class Dashboard extends Component{
                 </Card>
                 <Card className="alt-card2"></Card>
                 </div>
-                
+                </div>
             </Div>
         )
     }
