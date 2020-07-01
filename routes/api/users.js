@@ -187,6 +187,39 @@ router.post("/saveMessages", async(req,res) => {
         console.log(err.message);
         res.send(500).json("server error")
     }
+});
+
+router.get("/getMessages", async(req,res) => {
+    try{
+       let name1 = req.body.name1;
+       let name2 = req.body.name2;
+       let msgRecord = await Messages.findOne({ $or: [ {$and: [{name1: name1},{name2: name2}]}, {$and: [{name1: name2},{name2: name1}]}] });
+       if(!msgRecord){
+           console.log("No earlier coversation");
+           res.status(200).json("No earlier coversation");
+       }
+       else{
+           let SMFlag;
+           if(msgRecord.name1 == name1){
+               SMFlag = 1;
+           }
+           else{
+               SMFlag = 0;
+           }
+           let msgs = msgRecord.messages;
+           //console.log(msgs);
+           let arr = [];
+           msgs.map((msg,index) => {
+              if(msg){
+                arr.push({date:msg.date, Flag: msg.Flag, Message: msg.message});
+              }
+           });
+           res.status(200).json({arr,SMFlag});
+       }
+    }catch(err){
+        console.log(err.message);
+        res.status(500).json("server error");
+    }
 })
 
 module.exports = router;

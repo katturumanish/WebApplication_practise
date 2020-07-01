@@ -25,13 +25,6 @@ const Div = styled.div`
    }
 `;
 
-const renderFriend = (friend,index) => {
-    return(
-        <p className="alt-friend1">
-            <Link to="/chatbox/">{friend.name}</Link>
-        </p>
-    )
-}
 
 export default class RightSideBar extends Component{
     constructor(){
