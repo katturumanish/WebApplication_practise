@@ -189,7 +189,7 @@ router.post("/saveMessages", async(req,res) => {
     }
 });
 
-router.get("/getMessages", async(req,res) => {
+router.post("/getMessages", async(req,res) => {
     try{
        let name1 = req.body.name1;
        let name2 = req.body.name2;

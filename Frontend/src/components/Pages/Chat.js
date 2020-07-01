@@ -62,13 +62,16 @@ const Div = styled.div`
        top:10px;
        left:30px;
    }
+   .alt-MessageContent{
+       height:370px;
+       overflow:scroll;
+   }
 `;
-
 
 
 export default function Chatbox(){
     let { name } = useParams();
-    const [formElements, setFormElements] = useState({textmsg:""})
+    const [formElements, setFormElements] = useState({textmsg:"", refreshFlag: true})
 
     function handleChange(e){
         e.persist();
@@ -78,14 +81,14 @@ export default function Chatbox(){
         }))
     }
     
-    
+
     function handleSend(e){
-        e.persist();
         let name1 = localStorage.getItem("fname");
         let message = formElements.textmsg;
         setFormElements(s => ({
             ...s,
-            textmsg: "",     
+            textmsg: "", 
+            refreshFlag: !formElements.refreshFlag,  
         }));
         Axios.post("http://localhost:3001/users/saveMessages",{
             name1, 
@@ -93,7 +96,8 @@ export default function Chatbox(){
             message,
         }).then(res => {
             console.log(res.data);
-        })
+        });
+        
     }
 
     return(
@@ -104,7 +108,9 @@ export default function Chatbox(){
                   <p className="alt-msgcard-text">{name}</p>
                </div>
                <hr />
-               <MessageContent />
+               <div className="alt-MessageContent">
+                  <MessageContent name={name} />
+               </div>
                <div className="alt-msgcard-msgtxtbox">
                    <input value={formElements.textmsg} onChange={handleChange} name="textmsg" className="alt-msgcard-msgtxtbox-input" placeholder="     Type a message..."/>
                    <button onClick={handleSend} className="alt-msgcard-msgtxtbox-btn">Send</button>
