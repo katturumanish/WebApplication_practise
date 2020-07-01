@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import styled from "styled-components";
 import Axios from "axios";
 
@@ -36,6 +36,7 @@ export default class MessageContent extends Component{
     constructor(props){
         super();
         this.state = {
+             Interval:"",
              txtmsg:"",
              msgs:[],
              SMFlag:"",
@@ -45,18 +46,23 @@ export default class MessageContent extends Component{
     }
 
     componentDidMount(){
-        Axios.post("http://localhost:3001/users/getMessages",{
+        const interval = setInterval(() =>{
+            Axios.post("http://localhost:3001/users/getMessages",{
                 name1: localStorage.getItem("fname"),
                 name2: this.props.name
         }).then(res => {
-            console.log(res.data.arr);
             this.setState({
                 msgs: res.data.arr,
                 SMFlag: res.data.SMFlag
             });
-
         })
+        }, 100); 
+        this.setState({Interval: interval});
     }
+
+    componentWillUnmount() {
+        clearInterval(this.state.Interval);
+     }
 
     handleChange(e){
         e.preventDefault();
@@ -69,9 +75,8 @@ export default class MessageContent extends Component{
         e.preventDefault();
         let name1 = localStorage.getItem("fname");
         let message = this.state.txtmsg;
-        
         this.setState({
-            txtmsg:"  ", 
+            txtmsg:" ", 
 
         });
         Axios.post("http://localhost:3001/users/saveMessages",{
@@ -98,7 +103,7 @@ export default class MessageContent extends Component{
                )}
            </Div>
            <div className="alt-msgcard-msgtxtbox">
-              <input value={this.state.textmsg} onChange={this.handleChange} name="txtmsg" className="alt-msgcard-msgtxtbox-input" placeholder="     Type a message..."/>
+              <input value={this.state.txtmsg} onChange={this.handleChange} name="txtmsg" className="alt-msgcard-msgtxtbox-input" placeholder="     Type a message..."/>
               <button onClick={this.handleSend} className="alt-msgcard-msgtxtbox-btn">Send</button>
            </div>
         </>
