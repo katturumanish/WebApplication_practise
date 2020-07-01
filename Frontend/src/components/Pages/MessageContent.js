@@ -9,6 +9,7 @@ const Div = styled.div`
    background-color: #eee7dd;
    .alt-chatmsgdiv{
        width:100%;
+       
    }
    .alt-chatmsg1{
        margin:10px;
@@ -35,9 +36,12 @@ export default class MessageContent extends Component{
     constructor(props){
         super();
         this.state = {
+             txtmsg:"",
              msgs:[],
              SMFlag:"",
         };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSend = this.handleSend.bind(this);
     }
 
     componentDidMount(){
@@ -45,7 +49,7 @@ export default class MessageContent extends Component{
                 name1: localStorage.getItem("fname"),
                 name2: this.props.name
         }).then(res => {
-            console.log(res.data.arr)
+            console.log(res.data.arr);
             this.setState({
                 msgs: res.data.arr,
                 SMFlag: res.data.SMFlag
@@ -54,8 +58,34 @@ export default class MessageContent extends Component{
         })
     }
 
-    render(){       
+    handleChange(e){
+        e.preventDefault();
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
+    handleSend(e){
+        e.preventDefault();
+        let name1 = localStorage.getItem("fname");
+        let message = this.state.txtmsg;
+        
+        this.setState({
+            txtmsg:"  ", 
+
+        });
+        Axios.post("http://localhost:3001/users/saveMessages",{
+            name1, 
+            name2: this.props.name,
+            message,
+        }).then(res => {
+            console.log(res.data);
+        });
+    }
+
+    render(){
        return(
+        <>
            <Div>
                {this.state.msgs.map((msg,index) => {
                    if(msg.Flag == this.state.SMFlag){ 
@@ -67,6 +97,11 @@ export default class MessageContent extends Component{
                }
                )}
            </Div>
+           <div className="alt-msgcard-msgtxtbox">
+              <input value={this.state.textmsg} onChange={this.handleChange} name="txtmsg" className="alt-msgcard-msgtxtbox-input" placeholder="     Type a message..."/>
+              <button onClick={this.handleSend} className="alt-msgcard-msgtxtbox-btn">Send</button>
+           </div>
+        </>
        )
     }
 } 

@@ -72,34 +72,7 @@ const Div = styled.div`
 export default function Chatbox(){
     let { name } = useParams();
     const [formElements, setFormElements] = useState({textmsg:"", refreshFlag: true})
-
-    function handleChange(e){
-        e.persist();
-        setFormElements(s => ({
-            ...s,
-            [e.target.name]: e.target.value
-        }))
-    }
-    
-
-    function handleSend(e){
-        let name1 = localStorage.getItem("fname");
-        let message = formElements.textmsg;
-        setFormElements(s => ({
-            ...s,
-            textmsg: "", 
-            refreshFlag: !formElements.refreshFlag,  
-        }));
-        Axios.post("http://localhost:3001/users/saveMessages",{
-            name1, 
-            name2: name,
-            message,
-        }).then(res => {
-            console.log(res.data);
-        });
-        
-    }
-
+     
     return(
        <Div>
            <div className="alt-msgcard">
@@ -111,10 +84,7 @@ export default function Chatbox(){
                <div className="alt-MessageContent">
                   <MessageContent name={name} />
                </div>
-               <div className="alt-msgcard-msgtxtbox">
-                   <input value={formElements.textmsg} onChange={handleChange} name="textmsg" className="alt-msgcard-msgtxtbox-input" placeholder="     Type a message..."/>
-                   <button onClick={handleSend} className="alt-msgcard-msgtxtbox-btn">Send</button>
-               </div>
+               
            </div>
       </Div>
     )
