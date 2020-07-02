@@ -25,6 +25,9 @@ var UserSchema = new mongoose.Schema({
     avatar:{
         type: String
     },
+    coverpic:{
+        type: String
+    },
     date:{
         type: Date,
         default: Date.now

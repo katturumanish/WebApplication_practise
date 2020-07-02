@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import styled from "styled-components";
 import { Card } from "shards-react";
 import RightSideBar from "./RightSideBar";
+import Button from '@material-ui/core/Button';
+import axios from "axios";
 
 const Div = styled.div`
    background-color:#f1f2f6;
@@ -134,6 +136,11 @@ const Div = styled.div`
        border-radius:10px;
        box-shadow: 0 0 10px #eeeeee;
    }
+   .alt-uploadimg{
+    position:relative;
+    top:200px;
+    left:430px;
+   }
 `;
 
 export default class Dashboard extends Component{
@@ -141,6 +148,85 @@ export default class Dashboard extends Component{
         super();
         this.state = {
            
+        }
+        this.handleInputChange = this.handleInputChange.bind(this);
+    }
+
+    componentDidMount(){
+        
+    }
+
+    handleInputChange(e){
+        e.preventDefault();
+        const target = e.target;
+        const name = target.name;
+        console.log("name: ", name);
+        const value = target.value;
+    
+        if (name === "photos") {
+          console.log("Files : ", target.files);
+          var photos = target.files;
+          console.log("photos:", photos);
+          let data = new FormData();
+          for (var i = 0; i < photos.length; i++) {
+            data.append("photos", photos[i]);
+          }
+    
+          axios.defaults.withCredentials = true;
+          let email = localStorage.getItem("email");
+          axios
+            .post(`http://localhost:3001/users/upload-file/`+ email, data)
+            .then(response => {
+              var imagePreviewArr = [];
+              var photoArr = "";
+              console.log("inside upload-file post call front end");
+    
+              if (response.status === 200) {
+                for (var i = 0; i < photos.length; i++) {
+                  photoArr =
+                    photoArr.length == 0
+                      ? photos[i].name
+                      : photoArr + "," + photos[i].name;
+                  axios.defaults.withCredentials = true;
+                  axios
+                    .post(
+                      `http://localhost:3001/users/download-file/` +
+                        photos[i].name
+                    )
+                    .then(response => {
+                      //console.log("Imgae Res : ", response);
+                      let imagePreview = "data:image/jpg;base64, " + response.data;
+                      imagePreviewArr.push(imagePreview);
+                      console.log("imagePreviewArr:", imagePreviewArr);
+    
+                      //this.setState({
+                      //  photoThumbnail: imagePreviewArr,
+                      //  photos: photoArr
+                      //});
+                    })
+                    .catch(err => {
+                      if (err) {
+                        //this.setState({
+                        //  errorRedirect: true
+                        //});
+                      }
+                    });
+                }
+    
+                //console.log("Photos: ", this.state.photos);
+              }
+            })
+            .catch(err => {
+              if (err) {
+                //this.setState({
+                //  errorRedirect: true
+                //});
+              }
+            });
+        } else {
+          //this.setState({
+          //  [name]: value
+          //});
         }
     }
 
@@ -154,6 +240,21 @@ export default class Dashboard extends Component{
                 <div className="alt-Section1">
                   <Card className="alt-cardmain">
                       <img className="alt-img" src="https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"></img>
+                      <div className="alt-uploadimg">
+                         <input
+                           type="file"
+                           name="photos"
+                           style={{display:"none"}}
+                           id="contained-button-file"
+                           onChange={this.handleInputChange}
+                           multiple
+                         />
+                         <label htmlFor="contained-button-file">
+                           <Button variant="contained" component="span" className="">
+                             Add a Cover Photo
+                           </Button>
+                         </label>
+                      </div>
                   </Card>
                   <RightSideBar />
                 </div>

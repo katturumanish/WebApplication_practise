@@ -53,6 +53,7 @@ export function Login(){
       }).then(res => {
          console.log("res.data: ", res.data);
          localStorage.setItem("fname", res.data.fname);
+         localStorage.setItem("email", res.data.email);
          if(res.status == 200){
             setFormFields(s => ({
                ...s,

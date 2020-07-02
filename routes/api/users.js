@@ -8,6 +8,9 @@ const config = require('config');
 const User = require("../../models/User");
 const auth = require("../../middleware/auth");
 const Messages = require("../../models/Messages");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 router.post('/register', [
     check('firstName', 'First Name is required').not().isEmpty(),
@@ -97,6 +100,7 @@ router.post('/login', async (req,res) => {
               res.status(400).json("invalid password");
           }
           let fname = user.firstName;
+          let email = user.email;
           const payload = {
               user:{
                   id: user.id
@@ -105,7 +109,7 @@ router.post('/login', async (req,res) => {
 
           jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err,token) => {
               if(err) throw err;
-              res.json({token,fname});
+              res.json({token,fname,email});
           })
         }
     }catch(err){
@@ -222,4 +226,36 @@ router.post("/getMessages", async(req,res) => {
     }
 })
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "routes/api/uploads");
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    }
+  });
+  
+  const upload = multer({ storage });
+
+  router.post("/upload-file/:email", upload.array("photos", 5), async(req, res) => {
+    let email = req.params.email;
+    const user = await User.findOne({ email })
+    //console.log(user);
+    user.coverpic = req.files[0].originalname;
+    await user.save();
+    console.log("req.files: ", req.files[0].originalname);
+    res.end();
+  });
+  
+  router.post("/download-file/:file(*)", (req, res) => {
+    console.log("Inside DOwnload File");
+    var file = req.params.file;
+    var filelocation = path.join(__dirname + "/uploads", file);
+    var img = fs.readFileSync(filelocation);
+    var base64img = new Buffer(img).toString("base64");
+    res.writeHead(200, {
+      "Content--type": "image/jpg"
+    });
+    res.end(base64img);
+  });
 module.exports = router;
