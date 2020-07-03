@@ -227,35 +227,46 @@ router.post("/getMessages", async(req,res) => {
 })
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "routes/api/uploads");
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    }
-  });
-  
-  const upload = multer({ storage });
+  destination: (req, file, cb) => {
+    cb(null, "routes/api/uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
 
-  router.post("/upload-file/:email", upload.array("photos", 5), async(req, res) => {
-    let email = req.params.email;
-    const user = await User.findOne({ email })
-    //console.log(user);
-    user.coverpic = req.files[0].originalname;
-    await user.save();
-    console.log("req.files: ", req.files[0].originalname);
-    res.end();
-  });
+const upload = multer({ storage });
+router.post("/upload-file/:email", upload.array("photos", 5), async(req, res) => {
+  let email = req.params.email;
+  const user = await User.findOne({ email })
+  //console.log(user);
+  user.coverpic = req.files[0].originalname;
+  await user.save();
+  console.log("req.files: ", req.files[0].originalname);
+  res.end();
+});
   
-  router.post("/download-file/:file(*)", (req, res) => {
-    console.log("Inside DOwnload File");
-    var file = req.params.file;
-    var filelocation = path.join(__dirname + "/uploads", file);
+router.post("/download-file/:file(*)", (req, res) => {
+  console.log("Inside DOwnload File");
+  var file = req.params.file;
+  var filelocation = path.join(__dirname + "/uploads", file);
+  var img = fs.readFileSync(filelocation);
+  var base64img = new Buffer(img).toString("base64");
+  res.writeHead(200, {
+    "Content--type": "image/jpg"
+  });
+  res.end(base64img);
+});
+
+router.post("/getcoverpic", async(req, res) => {
+    let email = req.body.email;
+    let user = await User.findOne({ email });
+    var filelocation = path.join(__dirname + "/uploads", user.coverpic);
     var img = fs.readFileSync(filelocation);
     var base64img = new Buffer(img).toString("base64");
     res.writeHead(200, {
       "Content--type": "image/jpg"
     });
     res.end(base64img);
-  });
+})
 module.exports = router;

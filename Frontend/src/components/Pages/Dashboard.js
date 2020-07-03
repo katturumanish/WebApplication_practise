@@ -20,6 +20,13 @@ const Div = styled.div`
       border-radius:10px;
       box-shadow: 0 0 10px #eeeeee;
    }
+   .alt-cardmainimg{
+    position: relative;
+    border-radius:10px;
+    width:850px;
+    height:300px;
+    z-index:0;
+   }
    .alt-Section1{
        display:flex;
        width:1200px;
@@ -33,13 +40,14 @@ const Div = styled.div`
        box-shadow: 0 0 10px #eeeeee;
    }
    .alt-img{
-       position:relative;
+       position: absolute;
        left:380px;
        top:180px;
        width:150px;
        height:150px;
        border-radius:50%;
        border-width:thick;
+       z-index:1;
    }
    .alt-card1{
     position:relative;
@@ -137,9 +145,9 @@ const Div = styled.div`
        box-shadow: 0 0 10px #eeeeee;
    }
    .alt-uploadimg{
-    position:relative;
+    position:absolute;
     top:200px;
-    left:430px;
+    left:550px;
    }
 `;
 
@@ -147,13 +155,23 @@ export default class Dashboard extends Component{
     constructor(){
         super();
         this.state = {
-           
+           coverPic:""
         }
         this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     componentDidMount(){
-        
+        axios.post("http://localhost:3001/users/getcoverpic", {
+            email: localStorage.getItem("email")
+        }).then(res => {
+            var imagePreviewArr = [];
+            let imagePreview = "data:image/jpg;base64, " + res.data;
+            imagePreviewArr.push(imagePreview);
+            console.log("imagePreviewArr:", imagePreviewArr);
+            this.setState({
+                coverPic: imagePreview
+            });
+        });
     }
 
     handleInputChange(e){
@@ -198,11 +216,9 @@ export default class Dashboard extends Component{
                       let imagePreview = "data:image/jpg;base64, " + response.data;
                       imagePreviewArr.push(imagePreview);
                       console.log("imagePreviewArr:", imagePreviewArr);
-    
-                      //this.setState({
-                      //  photoThumbnail: imagePreviewArr,
-                      //  photos: photoArr
-                      //});
+                      this.setState({
+                        coverPic: imagePreview
+                      });
                     })
                     .catch(err => {
                       if (err) {
@@ -239,6 +255,7 @@ export default class Dashboard extends Component{
                 </Card>
                 <div className="alt-Section1">
                   <Card className="alt-cardmain">
+                      <img className="alt-cardmainimg" src={this.state.coverPic} />
                       <img className="alt-img" src="https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"></img>
                       <div className="alt-uploadimg">
                          <input
