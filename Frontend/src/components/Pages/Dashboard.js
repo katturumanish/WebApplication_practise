@@ -4,6 +4,7 @@ import { Card } from "shards-react";
 import RightSideBar from "./RightSideBar";
 import Button from '@material-ui/core/Button';
 import axios from "axios";
+import CameraAltIcon from '@material-ui/icons/CameraAlt';
 
 const Div = styled.div`
    background-color:#f1f2f6;
@@ -146,8 +147,13 @@ const Div = styled.div`
    }
    .alt-uploadimg{
     position:absolute;
-    top:200px;
-    left:550px;
+    top:240px;
+    left:630px;
+   }
+   .alt-upload-btn{
+       font-size: 14px;
+       font-weight:bold;
+       text-transform: none;
    }
 `;
 
@@ -267,8 +273,9 @@ export default class Dashboard extends Component{
                            multiple
                          />
                          <label htmlFor="contained-button-file">
-                           <Button variant="contained" component="span" className="">
-                             Add a Cover Photo
+                           <Button variant="contained" component="span" className="alt-upload-btn">
+                             <CameraAltIcon />
+                             Add Cover Photo
                            </Button>
                          </label>
                       </div>

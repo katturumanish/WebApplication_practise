@@ -92,7 +92,7 @@ export default class MessageContent extends Component{
        return(
         <>
            <Div>
-               {this.state.msgs.map((msg,index) => {
+               {this.state.msgs ? this.state.msgs.map((msg,index) => {
                    if(msg.Flag == this.state.SMFlag){ 
                      return <div className="alt-chatmsgdiv"><div className="alt-chatmsg1">{msg.Message}</div></div> 
                    }
@@ -100,7 +100,7 @@ export default class MessageContent extends Component{
                      return <div className="alt-chatmsgdiv"><div className="alt-chatmsg2">{msg.Message}</div></div>
                    }
                }
-               )}
+               ) : <div className="alt-chatmsgdiv"></div>}
            </Div>
            <div className="alt-msgcard-msgtxtbox">
               <input value={this.state.txtmsg} onChange={this.handleChange} name="txtmsg" className="alt-msgcard-msgtxtbox-input" placeholder="     Type a message..."/>
