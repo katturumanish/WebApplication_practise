@@ -38,8 +38,13 @@ export default class VideoFriends extends Component{
              this.setState({
                  friends: res.data
              });
-             console.log(this.state.friends);
-         })
+             console.log("friends: ", this.state.friends);
+         });
+        axios.get(`http://localhost:3001/users/getRoom_id?name=${name}`)
+         .then(res => {
+             console.log("room_id: ", res.data);
+             localStorage.setItem("room_id", res.data);
+         });
     }
 
     async friendClick(e){

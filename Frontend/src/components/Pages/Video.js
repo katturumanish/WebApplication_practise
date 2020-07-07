@@ -33,28 +33,43 @@ export default class Video extends Component{
       constructor(){
           super();
           this.state = {
-               room_id: ""
+               room_id: "",
+               Interval:""
           }
       }
 
        async componentDidMount(){
-          let name = localStorage.getItem("fname");
-          Axios.get(`http://localhost:3001/users/getRoom_id?name=${name}`)
-          .then(res =>{
-              console.log(res.data);
-              localStorage.setItem("room_id", res.data);
-              this.setState({
-                  room_id: res.data
-              })
-              
-          })
+          let id = await localStorage.getItem("room_id");
+          let currTimeset;
+          await Axios.get(`http://localhost:3001/users/getCurrentTime?id=${id}`)
+           .then(res => {
+             currTimeset = res.data;
+           })
+          console.log("currTime: ", currTimeset);
           var vid = document.getElementById("videoPlayer");
-          vid.currentTime = 80;
+          vid.currentTime = currTimeset;
           vid.play();
-      }
+          let fname = await localStorage.getItem("fname");
+          const interval = setInterval(() =>{
+            let currtime = vid.currentTime
+            Axios.post("http://localhost:3001/users/saveCurrentTime",{
+                id,
+                fname,
+                currtime
+           }).then(res => {
+               console.log("Save Current Time response: ", res.data);
+
+           })
+           }, 3000); 
+           this.setState({Interval: interval});
+         }
+         
+         componentWillUnmount() {
+            clearInterval(this.state.Interval);
+         }
 
        render(){
-           let src = `http://localhost:3001/users/video?room_id=${this.state.room_id}`;
+          let src = `http://localhost:3001/users/video?room_id=${this.state.room_id}`;
           return(
               <Div>
                   <div className="alt-room">

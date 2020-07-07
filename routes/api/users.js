@@ -301,6 +301,8 @@ router.get("/getFriends", async(req,res) =>{
 });
 
 router.get('/video', function(req, res) {
+    let {room_id} = req.query;
+    //console.log("room_id: ", room_id);
     const path = 'assets/sample.mp4'
     const stat = fs.statSync(path)
     const fileSize = stat.size
@@ -343,6 +345,32 @@ router.get('/video', function(req, res) {
       let {name}  = req.query;
       //console.log("name: ", name);
       let user = await User.findOne({ firstName: name}) 
-      console.log("user.room_id", user.room_id);
-      res.send(user.room_id)
+      //console.log("user.room_id", user.room_id);
+      res.status(200).json(user.room_id);
+  });
+
+  router.get("/getCurrentTime", async(req, res) => {
+      let {id} = req.query;
+      //console.log("id: ", id);
+      let room = await Rooms.findById(id);
+      //console.log("room.currTime: ", room.currTime);
+      res.status(200).json(room.currTime);
+  });
+
+  router.post("/saveCurrentTime", async(req,res) => {
+      let id = req.body.id;
+      let name = req.body.fname;
+      let currtime = req.body.currtime;
+      let room = await Rooms.findById(id);
+      //console.log("room.names[0]: ", room.names[0]);
+      if(room.names[0] == name){
+          room.currTime = currtime;
+          await room.save();
+          //console.log("room.currTime: ", room.currTime);
+          console.log("current time has been inserted");
+          res.status(200).json("current time has been inserted");
+      }
+      else{
+          res.status(200).json("You are not the leader of this room");
+      }
   })
