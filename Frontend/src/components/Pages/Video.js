@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import styled from "styled-components";
+import Axios from "axios";
 
 const Div = styled.div`
    .alt-video-card{
@@ -32,33 +33,39 @@ export default class Video extends Component{
       constructor(){
           super();
           this.state = {
-
+               room_id: ""
           }
       }
 
-      componentDidMount(){
-          
+       async componentDidMount(){
+          let name = localStorage.getItem("fname");
+          Axios.get(`http://localhost:3001/users/getRoom_id?name=${name}`)
+          .then(res =>{
+              console.log(res.data);
+              localStorage.setItem("room_id", res.data);
+              this.setState({
+                  room_id: res.data
+              })
+              
+          })
           var vid = document.getElementById("videoPlayer");
-          //console.log("vid: ", vid);
-          //vid.addEventListener('canplay', function() {
-          //    this.currentTime = 50;
-          //});
           vid.currentTime = 80;
           vid.play();
       }
 
-      render(){
+       render(){
+           let src = `http://localhost:3001/users/video?room_id=${this.state.room_id}`;
           return(
               <Div>
                   <div className="alt-room">
                     <div className="alt-video-card">
                        <video className="alt-video" id="videoPlayer" controls muted="muted" autoPlay> 
-                           <source src="http://localhost:3001/video" type="video/mp4" />
+                           <source src={src} type="video/mp4" />
                        </video>
                     </div>
                     <div className="alt-room-btn">
                         Add friends
-                        
+
                         <button className="">Create a room</button>
                     </div>
                     
