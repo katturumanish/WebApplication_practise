@@ -4,8 +4,10 @@ import {Login} from "./Pages/Login";
 import Register from "./Pages/Register";
 import Dashboard from "./Pages/Dashboard";
 import Chatbox from "./Pages/Chat";
+import Video from "./Pages/Video";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import {createGlobalStyle} from "styled-components";
+import VideoFriends from './Pages/VideoFriends';
 
 const GlobalStyle = createGlobalStyle`
    body{
@@ -34,8 +36,14 @@ function App() {
              <Route path="/Dashboard">
                 <Dashboard/>
              </Route>
+             <Route path="/video">
+                <Video />
+             </Route>
              <Route path="/chatbox/:name">
                 <Chatbox/>
+             </Route>
+             <Route path="/videofriends">
+                <VideoFriends />
              </Route>
           </Switch>
       </BrowserRouter>

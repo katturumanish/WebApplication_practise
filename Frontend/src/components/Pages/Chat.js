@@ -1,13 +1,9 @@
-import React,{useState} from "react";
-import { Chat, Channel, ChannelHeader, Thread, Window } from 'stream-chat-react';
-import { MessageList, MessageInput } from 'stream-chat-react';
+import React from "react";
 import { useParams } from "react-router";
-import { StreamChat } from 'stream-chat';
 import styled from "styled-components";
 import 'stream-chat-react/dist/css/index.css';
 import Avatar from '@material-ui/core/Avatar';
 import MessageContent from "./MessageContent";
-import Axios from "axios";
 
 const Div = styled.div`
    background-color:#f1f2f6;
@@ -71,7 +67,7 @@ const Div = styled.div`
 
 export default function Chatbox(){
     let { name } = useParams();
-    const [formElements, setFormElements] = useState({textmsg:"", refreshFlag: true})
+    //const [formElements, setFormElements] = useState({textmsg:"", refreshFlag: true})
      
     return(
        <Div>

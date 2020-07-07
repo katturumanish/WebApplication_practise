@@ -8,6 +8,7 @@ const config = require('config');
 const User = require("../../models/User");
 const auth = require("../../middleware/auth");
 const Messages = require("../../models/Messages");
+const Rooms = require("../../models/Room");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -270,3 +271,31 @@ router.post("/getcoverpic", async(req, res) => {
     res.end(base64img);
 })
 module.exports = router;
+
+router.post("/create-room", async(req, res) => {
+    //let leader = req.body.leader;
+    let members = req.body.members;
+    let names = members;
+    let room = new Rooms({
+        names
+    })
+    await room.save();
+    //console.log(room._id);
+    members.map(async(member,index) => {
+        let user = await User.findOne({ firstName: member});
+        user.room_id = room._id
+        user.save();
+    });
+    console.log("room created")
+    res.status(200).json(room._id);
+})
+
+router.get("/getFriends", async(req,res) =>{
+    let { fname } = req.query
+    let users = await User.find({ firstName: {$ne:fname}});
+    let arr = []
+    users.map((user,index) => {
+        arr.push(user.firstName)
+    })
+    res.send(arr);
+})

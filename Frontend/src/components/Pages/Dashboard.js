@@ -13,10 +13,10 @@ const Div = styled.div`
    .alt-cardmain{
       position:relative;
       display:flex;
-      top:30px;
+      top:10px;
       left:200px;
       width:850px;
-      height:300px;
+      height:320px;
       background-color:white;
       border-radius:10px;
       box-shadow: 0 0 10px #eeeeee;
@@ -25,7 +25,7 @@ const Div = styled.div`
     position: relative;
     border-radius:10px;
     width:850px;
-    height:300px;
+    height:320px;
     z-index:0;
    }
    .alt-Section1{

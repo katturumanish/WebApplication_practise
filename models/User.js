@@ -28,6 +28,9 @@ var UserSchema = new mongoose.Schema({
     coverpic:{
         type: String
     },
+    room_id:{
+        type: String
+    },
     date:{
         type: Date,
         default: Date.now
