@@ -3,15 +3,83 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Div = styled.div`
+    display:flex;
+    .alt-VFcontainer{
+        width:600px;
+    }
+    .alt-videofrnds-txtbx{
+        box-shadow: 0 0 5px #82b0fa;
+        height:400px;
+        border-radius: 20px;
+        background-color: #f3f6ff;
+        position:relative;
+        width:350px;
+        top:30px;
+        left:30px;
+    }
+    .alt-VF-txt{
+        position: relative;
+        left: 10px;
+        top: 20px;
+        font-size: 15px;
+    }
+   .alt-container1{
+      background-color: #f3f6ff;
+      width:700px;
+      border-radius: 10px;
+      height:1000px;
+   }
+   .alt-container2{
+      width:700px;
+      border-radius: 10px;
+      height:1000px;
+   }
+   .alt-roomlist{
+    position: relative;
+    left: 100px;
+    top: 20px;
+    width: 300px; 
+    height:300px;
+    border-radius: 20px;
+   }
+   .alt-roommember-btn{
+    border-style: none;
+    background-color: #f3f6ff;
+    color: black;
+    box-shadow: 0 0 5px #82b0fa;
+    border-radius:10px;
+    width: 200px;
+    height: 40px;
+    font-size: 15px;
+   }
+   .alt-roommember{
+       position:relative;
+       left:10px;
+   }
    .alt-friendslist{
        position: relative;
        left: 100px;
-       top: 100px;
+       top: 20px;
    }
    .alt-friend-btn{
        border-style: none;
-       background: white;
+       background-color: blue;
+       color: white;
+       box-shadow: 0 0 5px #82b0fa;
+       border-radius:10px;
+       width: 200px;
+       height: 40px;
        font-size: 15px;
+   }
+   .alt-createrm-btn{
+    border-style: none;
+    background-color: #fbdb3a;
+    color: white;
+    box-shadow: 0 0 5px #82b0fa;
+    border-radius:10px;
+    width: 200px;
+    height: 40px;
+    font-size: 15px;
    }
 `;
 
@@ -69,16 +137,37 @@ export default class VideoFriends extends Component{
     render(){
         return(
             <Div>
-            <div className="alt-friendslist">
-                <h3>Friends</h3>
-                {this.state.friends.map((friend,index) => 
-                    (
-                    <p className="alt-friend1">
-                       <button className="alt-friend-btn" name="name" onClick={this.friendClick} value={friend}>{friend}</button>
-                    </p>
-                ))}
-                <button onClick={this.handleCreateroom}>Create a room</button>
-            </div>
+               <div className="alt-VFcontainer">
+               <div className="alt-videofrnds-txtbx">
+                  <p className="alt-VF-txt">Add your friends to watch the movie together</p>
+               </div>
+               </div>
+               <div className="alt-container1">
+               <div className="alt-friendslist">
+                   <h3>Friends</h3>
+                   <div>
+                   {this.state.friends.map((friend,index) => 
+                       (
+                       <p className="alt-friend1">
+                          <button className="alt-friend-btn" name="name" onClick={this.friendClick} value={friend}>{friend}
+                          </button>
+                       </p>
+                   ))}
+                   </div>
+                   <button className="alt-createrm-btn" onClick={this.handleCreateroom}>Create a room</button>
+               </div>
+               </div>
+               <div className="alt-container2">
+                  <div className="alt-roomlist">
+                  <h3>Room members</h3>
+                  {this.state.room.map((room_member,index) => (
+                      <p className="alt-roommember">
+                      <button className="alt-roommember-btn" name="name" value={room_member}>{room_member}
+                      </button>
+                      </p>
+                  ))}
+                  </div>
+               </div>
             </Div>
         )
     }

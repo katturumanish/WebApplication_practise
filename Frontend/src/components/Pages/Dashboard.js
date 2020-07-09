@@ -5,6 +5,7 @@ import RightSideBar from "./RightSideBar";
 import Button from '@material-ui/core/Button';
 import axios from "axios";
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
+import { Link } from "react-router-dom";
 
 const Div = styled.div`
    background-color:#f1f2f6;
@@ -100,23 +101,14 @@ const Div = styled.div`
        font-weight:bold;
        font-size:25px;
    }
-   .alt-card1-ele1{
-       position:relative;
-       display:flex;
-       top:40px;
-       left:20px;
-       font-size:20px;
+   .alt-watchmovie{
+      color: black;
+      font-weight: bold;
+      text-decoration: none;
    }
    .alt-card1-ele1-txt1{
     position:relative;
     left:10px;
-   }
-   .alt-card1-ele2{
-    position:relative;
-    display:flex;
-    top:70px;
-    left:20px;
-    font-size:20px;
    }
    .alt-card1-ele2-txt1{
     position:relative;
@@ -283,23 +275,9 @@ export default class Dashboard extends Component{
                   <RightSideBar />
                 </div>
                 <div className="alt-mainline">
-                    <button className="alt-mainline-txt">Timeline</button>
-                    <button className="alt-mainline-txt1">About</button>
-                    <button className="alt-mainline-txt2">subjects</button>
+                    <Button> <Link to="/VideoFriends" className="alt-watchmovie">Watch a movie</Link></Button>
                 </div>
                 <div className="alt-segment2">
-                <Card className="alt-card1">
-                    <div className="alt-card1-txt1">Intro</div>
-                    <div className="alt-card1-ele1">
-                        <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/id4jdGYPaIP.png"></img>
-                        <div className="alt-card1-ele1-txt1">Studied at:</div>
-                    </div>
-                    <div className="alt-card1-ele2">
-                        <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/id4jdGYPaIP.png"></img>
-                        <div className="alt-card1-ele2-txt1">working at:</div>
-                    </div>
-                </Card>
-                <Card className="alt-card2"></Card>
                 </div>
                 </div>
             </Div>
