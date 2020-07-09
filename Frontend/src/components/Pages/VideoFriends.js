@@ -4,6 +4,12 @@ import axios from "axios";
 
 const Div = styled.div`
     display:flex;
+    .alt-VFapp{
+        
+        position:relative;
+        left:40px;
+        display:flex;
+    }
     .alt-VFcontainer{
         width:600px;
     }
@@ -14,7 +20,7 @@ const Div = styled.div`
         background-color: #f3f6ff;
         position:relative;
         width:350px;
-        top:30px;
+        top:0px;
         left:30px;
     }
     .alt-VF-txt{
@@ -24,9 +30,11 @@ const Div = styled.div`
         font-size: 15px;
     }
    .alt-container1{
+      position:relative;
+      top:20px;
       background-color: #f3f6ff;
       width:700px;
-      border-radius: 10px;
+      border-radius: 40px;
       height:1000px;
    }
    .alt-container2{
@@ -63,22 +71,22 @@ const Div = styled.div`
    }
    .alt-friend-btn{
        border-style: none;
-       background-color: blue;
+       background: linear-gradient(135deg, #5ee7df 0%, #b490ca 100%);
        color: white;
        box-shadow: 0 0 5px #82b0fa;
-       border-radius:10px;
+       border-radius:7px;
        width: 200px;
-       height: 40px;
+       height: 50px;
        font-size: 15px;
    }
    .alt-createrm-btn{
     border-style: none;
-    background-color: #fbdb3a;
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
     color: white;
     box-shadow: 0 0 5px #82b0fa;
     border-radius:10px;
     width: 200px;
-    height: 40px;
+    height: 50px;
     font-size: 15px;
    }
 `;
@@ -137,9 +145,13 @@ export default class VideoFriends extends Component{
     render(){
         return(
             <Div>
+               
                <div className="alt-VFcontainer">
+               <div className="alt-VFapp">
+                 <h4 >MovieTime</h4>
+               </div>
                <div className="alt-videofrnds-txtbx">
-                  <p className="alt-VF-txt">Add your friends to watch the movie together</p>
+                  <p className="alt-VF-txt">Add your friends to watch a movie together</p>
                </div>
                </div>
                <div className="alt-container1">
