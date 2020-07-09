@@ -3,15 +3,13 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Div = styled.div`
-    display:flex;
-    .alt-VFapp{
-        
-        position:relative;
-        left:40px;
-        display:flex;
+    .alt-Title{
+        position: relative;
+        left:30px;
+        top: 10px;
     }
-    .alt-VFcontainer{
-        width:600px;
+    .alt-sections{
+        display:flex;
     }
     .alt-videofrnds-txtbx{
         box-shadow: 0 0 5px #82b0fa;
@@ -31,16 +29,27 @@ const Div = styled.div`
     }
    .alt-container1{
       position:relative;
-      top:20px;
+      left: 20px;
+      top:10px;
       background-color: #f3f6ff;
-      width:700px;
+      width:400px;
       border-radius: 40px;
-      height:1000px;
+      height:600px;
+      overflow: scroll;
    }
    .alt-container2{
-      width:700px;
+      width: 500px;
       border-radius: 10px;
       height:1000px;
+   }
+   .alt-container3{
+    position:relative;
+    left: 20px;
+    top:-30px;
+    background-color: #f3f6ff;
+    width:400px;
+    border-radius: 40px;
+    height:600px;
    }
    .alt-roomlist{
     position: relative;
@@ -101,6 +110,7 @@ export default class VideoFriends extends Component{
         }
         this.friendClick = this.friendClick.bind(this);
         this.handleCreateroom = this.handleCreateroom.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
     }
 
     async componentDidMount(){
@@ -133,6 +143,13 @@ export default class VideoFriends extends Component{
         console.log(this.state.room);
     }
 
+    handleRemove(e){
+        let idx = e.target.id;
+        this.state.room.splice(idx,1)
+        this.setState({
+            room : this.state.room
+        });
+    }
     handleCreateroom(e){
         axios.post("http://localhost:3001/users/create-room", {
             members: this.state.room
@@ -144,16 +161,12 @@ export default class VideoFriends extends Component{
 
     render(){
         return(
+            <>
+            
             <Div>
-               
-               <div className="alt-VFcontainer">
-               <div className="alt-VFapp">
-                 <h4 >MovieTime</h4>
-               </div>
-               <div className="alt-videofrnds-txtbx">
-                  <p className="alt-VF-txt">Add your friends to watch a movie together</p>
-               </div>
-               </div>
+               <div className="alt-sections">
+               <div>
+               <h4 className="alt-Title">MovieTime</h4>
                <div className="alt-container1">
                <div className="alt-friendslist">
                    <h3>Friends</h3>
@@ -169,18 +182,24 @@ export default class VideoFriends extends Component{
                    <button className="alt-createrm-btn" onClick={this.handleCreateroom}>Create a room</button>
                </div>
                </div>
+               </div>
                <div className="alt-container2">
                   <div className="alt-roomlist">
                   <h3>Room members</h3>
                   {this.state.room.map((room_member,index) => (
                       <p className="alt-roommember">
-                      <button className="alt-roommember-btn" name="name" value={room_member}>{room_member}
+                      <button className="alt-roommember-btn" name="name" id={index} onClick={this.handleRemove} value={room_member}>{room_member}
                       </button>
                       </p>
                   ))}
                   </div>
                </div>
+               <div className="alt-container3">
+                   Rooms
+               </div>
+               </div>
             </Div>
+            </>
         )
     }
 }
